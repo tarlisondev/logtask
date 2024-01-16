@@ -14,6 +14,6 @@ export default (err) => {
     if (err) {
       return console.log('error')
     }
-    console.log(`start http://localhost:${config.app.port}`)
+    console.log(`Server Open`)
   });
 }
