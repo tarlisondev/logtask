@@ -115,6 +115,36 @@ body {
   color: red;
 }
 
+/* ########## BTN-MENU ############*/
+
+.position-over-view {
+  z-index: 1;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.position-over-view img {
+  width: 60vw;
+  max-width: 70%;
+  height: auto;
+}
+
+.position-over-view span {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  font-size: 40px;
+  color: rgb(255, 0, 0);
+  cursor: pointer;
+}
+
 /* ########## HOME ############*/
 
 .home {

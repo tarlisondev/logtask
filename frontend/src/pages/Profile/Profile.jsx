@@ -10,6 +10,7 @@ import { ImExit } from "react-icons/im";
 
 import "../../styles/global.css";
 import Menu from "../../components/Menu";
+import PreView from "../../components/PreView";
 
 function Profile() {
 
@@ -18,6 +19,7 @@ function Profile() {
   const [task, setTask] = useState({ task: '' });
   const [list, setList] = useState([]);
   const [test, setTest] = useState(false)
+  const [view, setView] = useState(false)
 
   function refreshList() {
 
@@ -72,6 +74,10 @@ function Profile() {
     !test ? setTest(true) : setTest(false)
   }
 
+  function overView() {
+    !view ? setView(true) : setView(false)
+  }
+
   return (
 
     <div className="container">
@@ -79,7 +85,7 @@ function Profile() {
       <header className="profile-header">
 
         <div className="profile-user">
-          <img src={myUser && myUser.profile} alt={myUser && myUser.name} />
+          <img onClick={overView} src={myUser && myUser.profile} alt={myUser && myUser.name} />
           <h1>{myUser && myUser.name}</h1>
         </div>
 
@@ -88,6 +94,16 @@ function Profile() {
         </nav>
 
       </header>
+
+
+
+      {
+
+        view &&
+        <>
+          <PreView img={myUser.profile} btn={overView} />
+        </>
+      }
 
       {
         test &&
