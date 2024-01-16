@@ -6,8 +6,7 @@ import cors from "cors";
 const app = express();
 app.use(cors({
   origin: {
-    web: "",
-    local: "http://localhost:5173"
+    web: "https://logtask-client.onrender.com",
   },
   methods: "GET, POST, DELETE, PATCH, PUT"
 }))
