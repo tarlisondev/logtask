@@ -9,5 +9,8 @@ export default {
   },
   jwt: {
     secret: process.env.SECRET
+  },
+  web: {
+    link: process.env.LINK_WEB
   }
 }
