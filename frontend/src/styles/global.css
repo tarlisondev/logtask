@@ -3,7 +3,6 @@
   padding: 0;
   box-sizing: border-box;
   font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-  font-weight: 100;
 }
 
 body {
@@ -138,22 +137,23 @@ body {
 .home h1,
 .home p {
   margin: 0;
-  color: rgb(255, 255, 255);
+  color: black;
   font-weight: 50;
-  text-shadow: 1px 1px 4px #7e7b7b;
+  text-shadow: 1px 1px 4px #d8d1d1;
 }
 
 .home p {
   margin-top: -2px;
+  color: black;
 }
 
 .home a {
   text-decoration: none;
-  color: rgb(248, 79, 0);
+  color: rgb(28, 79, 219);
 }
 
 .home a:hover {
-  color: rgb(255, 0, 0);
+  color: rgb(25, 255, 4);
 }
 
 
