@@ -11,6 +11,7 @@ export default {
     secret: process.env.SECRET
   },
   web: {
-    link: process.env.LINK_WEB
+    link: process.env.LINK_WEB,
+    local: process.env.LINK_LOCAL,
   }
 }

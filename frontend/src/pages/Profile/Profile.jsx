@@ -97,13 +97,7 @@ function Profile() {
 
 
 
-      {
-
-        view &&
-        <>
-          <PreView img={myUser.profile} btn={overView} />
-        </>
-      }
+      {view && <PreView img={myUser.profile} btn={overView} />}
 
       {
         test &&

@@ -1,8 +1,9 @@
 
 import axios from 'axios';
+import config from "../config/config.js"
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_REACT_APP_URL,
+  baseURL: config.web.local
 });
 
 export const useApi = () => ({

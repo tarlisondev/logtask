@@ -4,37 +4,36 @@ import { AuthContext } from '../../Auth/AuthContext';
 import "../../styles/global.css";
 import { Link, useNavigate } from 'react-router-dom';
 import Back from '../../components/Back';
+import Message from '../../components/Message'
+import Loading from '../../components/Loading';
 
 function Register() {
 
-  const { register, user } = useContext(AuthContext);
+  const { register } = useContext(AuthContext);
   const [myUser, setMyUser] = useState({ name: '', email: '', tel: '', profile: '', password: '', confirmPassword: '' });
-  const [valid, setValid] = useState(true);
+  const [msg, setMsg] = useState({ message: '', view: false, load: false })
   const navigate = useNavigate();
 
   function handleRegister(event) {
     event.preventDefault();
+
+    if (myUser.password !== myUser.confirmPassword) return setMsg({ message: "Passwords is unSimilar" });
+    if (!myUser.confirmPassword) return setMsg({ message: "Fields with ( * ) is required" })
+
     register(myUser.name, myUser.email, myUser.tel, myUser.profile, myUser.password)
+
       .then((res) => {
-        res.status === 201 && alert(res.data.msg), navigate('/login')
+        res.status === 201 && setMsg({ message: res.data.msg }), navigate('/login')
       })
       .catch((err) => {
-        alert(err.response.data.msg)
+        setMsg({ message: err.response.data.msg })
       })
+
+    setMsg({ load: true })
   }
 
-  function handleSimilar() {
-
-    if (myUser.password !== myUser.confirmPassword) {
-      setValid(true)
-      return alert("Passwords is unSimilar");
-    }
-    if (!myUser.name || !myUser.email || !myUser.tel || !myUser.password) {
-      setValid(true)
-      return alert("Fields with ( * ) is required")
-    }
-
-    setValid(false);
+  function MessageView() {
+    !msg.view ? setMsg({ view: true }) : setMsg({ view: false })
   }
 
   return (
@@ -92,13 +91,16 @@ function Register() {
             placeholder='confirm password'
             value={myUser.confirmPassword}
             onChange={e => setMyUser({ ...myUser, confirmPassword: e.target.value })}
-            onBlur={handleSimilar}
           />
 
-          <button disabled={valid} onClick={handleRegister}>Register</button>
+          <button onClick={handleRegister}>Register</button>
 
         </div>
       </form>
+
+      {msg.message && <Message msg={msg.message} btn={MessageView} />}
+      {msg.load && <Loading />}
+
     </div>
   )
 }

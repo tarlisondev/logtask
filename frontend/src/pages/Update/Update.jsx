@@ -5,12 +5,14 @@ import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../Auth/AuthContext';
 import "../../styles/global.css";
 import Back from '../../components/Back';
+import Message from '../../components/Message';
+import Loading from '../../components/Loading';
 
 function Update() {
 
   const { profile, edit, user } = useContext(AuthContext);
   const [myUser, setMyUser] = useState({ name: '', email: '', tel: '', profile: '' });
-  const [valid, setValid] = useState(true);
+  const [msg, setMsg] = useState({ message: '', view: false, load: false });
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -18,7 +20,6 @@ function Update() {
     profile(user.data.id, user.data.token)
       .then((res) => {
         res.status === 200 &&
-          setValid(false),
           setMyUser({
             ...myUser,
             name: res.data.list.name,
@@ -36,10 +37,16 @@ function Update() {
     edit(user.data.id, myUser.name, myUser.email, myUser.tel, myUser.profile)
       .then((res) => {
         res.status === 201 &&
-          navigate("/profile"),
-          alert(res.data.msg)
+          setMsg({ message: res.data.msg }),
+          navigate("/profile")
       })
-      .catch(err => alert(err.response.data.msg));
+      .catch(err => setMsg({ message: err.response.data.msg }))
+
+    setMsg({ load: true })
+  }
+
+  function MessageView() {
+    !msg.view ? setMsg({ view: true }) : setMsg({ view: false })
   }
 
   return (
@@ -83,10 +90,14 @@ function Update() {
             onChange={e => setMyUser({ ...myUser, profile: e.target.value })}
           />
 
-          <button disabled={valid} onClick={handleEdit}>Confirm</button>
+          <button onClick={handleEdit}>Confirm</button>
 
         </div>
       </form>
+
+      {msg.message && <Message msg={msg.message} btn={MessageView} />}
+      {msg.load && <Loading />}
+
     </div>
   )
 }

@@ -70,8 +70,9 @@ const controllerLogin = {
     const passHash = await hash(password, 12);
 
     const date = new Date().toLocaleDateString();
+    const img = 'https://sindag.org.br/wp-content/uploads/2020/06/user.png'
 
-    await login.create({ name, email, tel, profile, password: passHash, create_at: date, update_at: date });
+    await login.create({ name, email, tel, profile: img, password: passHash, create_at: date, update_at: date });
     res.status(201).json({ msg: "User create successfully" });
 
   },

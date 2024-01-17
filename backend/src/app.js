@@ -8,6 +8,7 @@ const app = express();
 app.use(cors({
   origin: {
     web: config.web.link,
+    local: config.web.local,
   },
   methods: "GET, POST, DELETE, PATCH, PUT"
 }))

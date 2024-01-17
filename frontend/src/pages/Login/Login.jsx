@@ -4,23 +4,30 @@ import { Link, useNavigate } from "react-router-dom";
 import Back from "../../components/Back";
 
 import "../../styles/global.css";
+import Message from "../../components/Message";
+import Loading from "../../components/Loading";
 
 function Login() {
 
-
-  const { user, sign } = useContext(AuthContext);
+  const { sign } = useContext(AuthContext);
   const [myUser, setMyUser] = useState({ email: '', password: '' });
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const [msg, setMsg] = useState({ message: '', view: false, load: false });
 
   const handleLogin = (e) => {
     e.preventDefault();
     sign(myUser.email, myUser.password)
       .then((res) => {
-        res.status === 200 && alert(res.data.msg), navigate("/profile")
+        res.status === 200 && setMsg({ message: res.data.msg }), navigate("/profile")
       })
-      .catch((err) => {
-        alert(err.response.data.msg)
-      })
+      .catch(err => setMsg({ message: err.response.data.msg }))
+
+    setMsg({ load: true })
+
+  }
+
+  function MessageView() {
+    !msg.view ? setMsg({ view: true }) : setMsg({ view: false })
   }
 
   return (
@@ -49,7 +56,8 @@ function Login() {
         <button onClick={handleLogin}>Login</button>
       </form>
 
-      <hr />
+      {msg.message && <Message msg={msg.message} btn={MessageView} />}
+      {msg.load && <Loading />}
 
     </div>
 
