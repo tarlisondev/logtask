@@ -11,23 +11,29 @@ import { ImExit } from "react-icons/im";
 import "../../styles/global.css";
 import Menu from "../../components/Menu";
 import PreView from "../../components/PreView";
+import Message from "../../components/Message";
+import Loading from "../../components/Loading";
 
 function Profile() {
 
   const { createTask, listTasks, updateTask, deleteTask, profile, user } = useContext(AuthContext);
   const [myUser, setMyUser] = useState({});
-  const [task, setTask] = useState({ task: '' });
-  const [list, setList] = useState([]);
-  const [test, setTest] = useState(false)
-  const [view, setView] = useState(false)
+  const [data, setData] = useState({
+    myTasks: [],
+    task: '',
+    message: '',
+    menuView: false,
+    profileView: false,
+    messageView: false,
+    loadView: false,
+  });
 
   function refreshList() {
-
     listTasks(user.data.id)
       .then((res) => {
-        res.status === 200 && setList(res.data.myTask)
+        res.status === 200 && setData({ myTasks: res.data.myTask })
       })
-      .catch(err => console.log(err.response.data.msg))
+      .catch(err => setData({ message: err.response.data.msg }))
   }
 
   useEffect(() => {
@@ -38,20 +44,20 @@ function Profile() {
           setMyUser(res.data.list),
           refreshList()
       })
-      .catch(err => alert(err.response.data.msg))
+      .catch(err => setData({ message: err.response.data.msg }))
 
   }, []);
 
   function handleCreateTask() {
-    if (!task.task) return alert("Digite uma tarefa")
-    if (task.task.length < 3) return alert("Pelo menos 3 caracteres")
-    createTask(user.data.id, task.task)
+    if (!data.task) return setData({ message: "Digite uma tarefa" })
+    if (data.task.length < 3) return setData({ message: "Pelo menos 3 caracteres" })
+    createTask(user.data.id, data.task)
       .then((res) => {
         res.status === 201 &&
-          setTask({ task: '' }),
+          setData({ task: '' }),
           refreshList()
       })
-      .catch(err => alert(err.response.data.msg))
+      .catch(err => setData({ message: err.response.data.msg }))
   }
 
   function handleDeleteTask(id) {
@@ -59,7 +65,7 @@ function Profile() {
       .then((res) => {
         res.status === 200 && refreshList()
       })
-      .catch(err => alert(err.response.data.msg))
+      .catch(err => setData({ message: err.response.data.msg }))
   }
 
   function handleUpdateTask(id, status) {
@@ -67,15 +73,19 @@ function Profile() {
       .then((res) => {
         res.status === 201 && refreshList()
       })
-      .catch(err => alert(err.response.data.msg))
+      .catch(err => setData({ message: err.response.data.msg }))
   }
 
-  function menu() {
-    !test ? setTest(true) : setTest(false)
+  function menuView() {
+    !data.menuView ? setData({ menuView: true }) : setData({ menuView: false })
   }
 
-  function overView() {
-    !view ? setView(true) : setView(false)
+  function profileView() {
+    !data.profileView ? setData({ profileView: true }) : setData({ profileView: false })
+  }
+
+  function MessageView() {
+    !data.messageView ? setData({ messageView: true }) : setData({ messageView: false })
   }
 
   return (
@@ -85,22 +95,20 @@ function Profile() {
       <header className="profile-header">
 
         <div className="profile-user">
-          <img onClick={overView} src={myUser && myUser.profile} alt={myUser && myUser.name} />
+          <img onClick={profileView} src={myUser && myUser.profile} alt={myUser && myUser.name} />
           <h1>{myUser && myUser.name}</h1>
         </div>
 
         <nav className="profile-menu">
-          <ImMenu onClick={menu} />
+          <ImMenu onClick={menuView} />
         </nav>
 
       </header>
 
-
-
-      {view && <PreView img={myUser.profile} btn={overView} />}
+      {data.profileView && <PreView img={myUser.profile} btn={profileView} />}
 
       {
-        test &&
+        data.menuView &&
 
         <Menu>
 
@@ -109,11 +117,11 @@ function Profile() {
             <span>{myUser && myUser.email}</span>
           </div>
 
-          <Link to="/profile/update"><TiEdit /> edit account</Link>
-          <Link to="/profile/delete"><IoTrashOutline />delete account</Link>
-          <Link to="/"><ImExit />exit account</Link>
+          <Link to="/profile/update"><TiEdit /> <span>edit account</span></Link>
+          <Link to="/profile/delete"><IoTrashOutline /><span>delete account</span></Link>
+          <Link to="/"><ImExit /><span>exit account</span></Link>
 
-          <span onClick={menu} className="menu-hide"><IoCloseSharp /></span>
+          <span onClick={menuView} className="menu-hide"><IoCloseSharp /></span>
 
         </Menu>
       }
@@ -127,14 +135,13 @@ function Profile() {
           <input
             type="text"
             placeholder="Criar tarefa"
-            value={task.task}
-            onChange={e => setTask({ ...task, task: e.target.value })}
-            onFocus={null}
+            value={data.task}
+            onChange={e => setData({ task: e.target.value })}
           />
           <button onClick={handleCreateTask}>Add</button>
         </div>
 
-        {myUser && list.length !== 0 ?
+        {data.myTasks && data.myTasks.length !== 0 ?
           <>
             <table>
               <thead>
@@ -148,7 +155,7 @@ function Profile() {
               </thead>
               <tbody>
                 {
-                  list.map((task, index) => (
+                  data.myTasks.map((task, index) => (
 
                     <tr key={task._id}>
 
@@ -169,7 +176,6 @@ function Profile() {
                         <button onClick={() => handleDeleteTask(task._id)}><IoTrashOutline /></button>
                       </td>
                     </tr>
-
                   ))
                 }
 
@@ -181,7 +187,12 @@ function Profile() {
 
       </section>
 
+
+      {data.message && <Message msg={data.message} btn={MessageView} />}
+      {data.loadView && <Loading />}
+
     </div>
+
   )
 }
 

@@ -20,7 +20,9 @@ function Login() {
       .then((res) => {
         res.status === 200 && setMsg({ message: res.data.msg }), navigate("/profile")
       })
-      .catch(err => setMsg({ message: err.response.data.msg }))
+      .catch((err) => {
+        err.code && setMsg({ message: err.message }), setMsg({ message: err.response.data.msg })
+      })
 
     setMsg({ load: true })
 
