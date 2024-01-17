@@ -58,6 +58,8 @@ function Profile() {
           refreshList()
       })
       .catch(err => setData({ message: err.response.data.msg }))
+
+    setData({ loadView: true })
   }
 
   function handleDeleteTask(id) {
@@ -66,6 +68,7 @@ function Profile() {
         res.status === 200 && refreshList()
       })
       .catch(err => setData({ message: err.response.data.msg }))
+    setData({ loadView: true })
   }
 
   function handleUpdateTask(id, status) {
@@ -74,6 +77,7 @@ function Profile() {
         res.status === 201 && refreshList()
       })
       .catch(err => setData({ message: err.response.data.msg }))
+    setData({ loadView: true })
   }
 
   function menuView() {
