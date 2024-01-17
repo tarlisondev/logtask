@@ -178,13 +178,13 @@ body {
   text-shadow: 0px 0px 5px rgb(255, 255, 255);
 }
 
-.message-view>div span {
+.message-view span {
   position: relative;
-  top: -22px;
-  right: -74px;
+  top: -75px;
+  right: -120px;
   width: 25px;
   height: 25px;
-  background: rgb(224, 67, 67);
+  background: rgb(238, 64, 58);
   color: white;
   display: flex;
   justify-content: center;

@@ -9,9 +9,10 @@ function Message({ msg, btn }) {
       <div>
 
         <div>{msg}</div>
-        <span onClick={btn}>X</span>
 
       </div>
+
+      <span onClick={btn}>X</span>
 
     </div>
   )
