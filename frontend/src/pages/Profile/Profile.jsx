@@ -18,9 +18,9 @@ function Profile() {
 
   const { createTask, listTasks, updateTask, deleteTask, profile, user } = useContext(AuthContext);
   const [myUser, setMyUser] = useState({});
+  const [task, setTask] = useState("");
+  const [myTasks, setMyTasks] = useState([]);
   const [data, setData] = useState({
-    myTasks: [],
-    task: '',
     message: '',
     menuView: false,
     profileView: false,
@@ -31,9 +31,11 @@ function Profile() {
   function refreshList() {
     listTasks(user.data.id)
       .then((res) => {
-        res.status === 200 && setData({ myTasks: res.data.myTask })
+        res.status === 200 && setMyTasks(res.data.myTask)
       })
       .catch(err => setData({ message: err.response.data.msg }))
+
+    setData({ loadView: false })
   }
 
   useEffect(() => {
@@ -49,12 +51,12 @@ function Profile() {
   }, []);
 
   function handleCreateTask() {
-    if (!data.task) return setData({ message: "Digite uma tarefa" })
-    if (data.task.length < 3) return setData({ message: "Pelo menos 3 caracteres" })
-    createTask(user.data.id, data.task)
+    if (!task) return setData({ message: "Digite uma tarefa" })
+    if (task.length < 3) return setData({ message: "Pelo menos 3 caracteres" })
+    createTask(user.data.id, task)
       .then((res) => {
         res.status === 201 &&
-          setData({ task: '' }),
+          setTask(""),
           refreshList()
       })
       .catch(err => setData({ message: err.response.data.msg }))
@@ -139,13 +141,13 @@ function Profile() {
           <input
             type="text"
             placeholder="Criar tarefa"
-            value={data.task}
-            onChange={e => setData({ task: e.target.value })}
+            value={task}
+            onChange={(e) => setTask(e.target.value)}
           />
           <button onClick={handleCreateTask}>Add</button>
         </div>
 
-        {data.myTasks && data.myTasks.length !== 0 ?
+        {myTasks && myTasks.length !== 0 ?
           <>
             <table>
               <thead>
@@ -159,7 +161,7 @@ function Profile() {
               </thead>
               <tbody>
                 {
-                  data.myTasks.map((task, index) => (
+                  myTasks.map((task, index) => (
 
                     <tr key={task._id}>
 
